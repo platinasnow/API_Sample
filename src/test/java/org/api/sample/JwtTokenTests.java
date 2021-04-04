@@ -18,25 +18,19 @@ public class JwtTokenTests {
     private final Logger logger = LoggerFactory.getLogger(JwtTokenTests.class);
     private MockMvc mockMvc;
 
-    //@Test
+    @Test
     public void createTokenTest(){
         String token = jwtTokenProvider.createJwtToken("test", null);
         logger.info("token ===>{}", token);
         assert (token != null);
     }
 
-    //@Test
+    @Test
     public void getTokenBodyTest(){
         String expiredToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MTIzIiwicm9sZXMiOlsiUk9MRV9VU0VSIl0sImV4cCI6MTYxNzE3OTM2NCwiaWF0IjoxNjE3MTc3NTY0fQ.BZIvRyFr1pNiEw62nq1y8eHxejpJQNPfAbIQlbG5qFI";
         String primaryKey = jwtTokenProvider.getUserPrimaryKey(expiredToken);
         assert (primaryKey == null);
     }
-
-    @Test
-    public void loginTest(){
-
-    }
-
 
 
 }

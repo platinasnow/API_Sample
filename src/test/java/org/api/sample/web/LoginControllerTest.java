@@ -26,7 +26,7 @@ class LoginControllerTest {
 
     private static String authToken = "";
 
-    //@Test
+    @Test
     void noTokenAccessDenyTest() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/test")).andExpect(MockMvcResultMatchers.status().isForbidden());
     }
@@ -35,7 +35,7 @@ class LoginControllerTest {
     void loginTest() throws Exception {
         Members member = new Members();
         member.setId("test");
-        member.setPwd("123");
+        member.setPwd("test123");
         ObjectMapper mapper = new ObjectMapper();
         String memberJson =  mapper.writeValueAsString(member);
 
