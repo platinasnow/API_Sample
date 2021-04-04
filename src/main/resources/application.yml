@@ -1,5 +1,10 @@
 server:
   port: 9000
+  error:
+    path: /exError
+    whitelabel:
+      enabled: false
+      
 
 spring:
   jwt:
