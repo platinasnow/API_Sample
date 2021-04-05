@@ -1,8 +1,8 @@
 package org.api.sample.web;
 
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.api.sample.model.Members;
+import org.api.sample.model.response.ItemResponse;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +28,7 @@ class LoginControllerTest {
 
     @Test
     void noTokenAccessDenyTest() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/test")).andExpect(MockMvcResultMatchers.status().isForbidden());
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/access-test")).andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
     @Test
@@ -45,14 +45,14 @@ class LoginControllerTest {
                 .andReturn().getResponse().getContentAsString();
 
         logger.info("token ===> {}", token);
-
-        authToken = token;
+        ItemResponse tokenResponse = mapper.readValue(token, ItemResponse.class);
+        authToken = tokenResponse.getData().toString();
     }
 
     @Test
     void loginSuccessAccessTest() throws Exception {
         logger.info("token check ===> {}", authToken);
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/test")
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/access-test")
                 .header("X-AUTH-TOKEN", authToken)
         ).andExpect(MockMvcResultMatchers.status().isOk());
     }

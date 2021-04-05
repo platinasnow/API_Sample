@@ -31,7 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .headers().frameOptions().sameOrigin()
                 .and()
                     .authorizeRequests()
-                        .antMatchers("/exError", "/api/test").permitAll()
+                        .antMatchers("/exError").permitAll()
                         .antMatchers("/h2-console/*").permitAll()
                         .antMatchers("/").permitAll()
                         .antMatchers("/api/login").permitAll()

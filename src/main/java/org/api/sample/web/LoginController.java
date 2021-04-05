@@ -32,7 +32,7 @@ public class LoginController {
         return responseService.getFailedResponse("1000", "loginFail");
     }
 
-    @GetMapping("/test")
+    @GetMapping("/access-test")
     public CommonResponse test(){
         return responseService.getSuccessResponse();
     }
