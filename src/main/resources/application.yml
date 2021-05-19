@@ -9,6 +9,7 @@ server:
 spring:
   jwt:
     secret: $2a$10$Nz.2j8OVbxuo/taCTOVowu.A//Rr3163jJGs4cdj0vACLyvCnlCZ2
+    refreshTokenSecret: (2a$10$Nz.4j8OVbxuo/taCTOVowu.A//Rr3163jJGs4cdj0vACLyvCnlCZ3
 
   h2:
     console:

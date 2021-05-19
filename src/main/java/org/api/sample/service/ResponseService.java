@@ -21,7 +21,6 @@ public class ResponseService {
     //실패
     public CommonResponse getFailedResponse(String code, String msg){
         CommonResponse commonResponse = new CommonResponse();
-        commonResponse.setResult(false);
         commonResponse.setCode(code);
         commonResponse.setMsg(msg);
         return commonResponse;
@@ -44,7 +43,6 @@ public class ResponseService {
     }
 
     private void setSuccessCode(CommonResponse response){
-        response.setResult(true);
         response.setCode("0");
         response.setMsg("SUCCESS");
     }

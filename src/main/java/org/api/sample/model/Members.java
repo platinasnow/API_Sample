@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import java.io.Serializable;
 
 @Entity
-public class Members implements Serializable {
+public class Members extends Tokens implements Serializable {
 
     @Id
     private String id;
@@ -34,8 +34,7 @@ public class Members implements Serializable {
     @Override
     public String toString() {
         return "Members{" +
-                "id='" + id + '\'' +
-                ", pwd='" + pwd + '\'' +
+                "id='" + id + '\''+
                 '}';
     }
 }

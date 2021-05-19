@@ -23,9 +23,11 @@ public class LoginController {
 
     @PostMapping("/login")
     public CommonResponse login(@RequestBody Members members){
+        String refreshTokenValid = jwtTokenProvider.getUserPrimaryKey(members.getRefreshToken());
         Members loginItem =  memberService.findById(members.getId());
         if(loginItem != null ){
-            if(members.getPwd() != null && passwordEncoder.matches(members.getPwd(), loginItem.getPwd())){
+            if(loginItem.getId().equals(refreshTokenValid) ||
+                    (members.getPwd() != null && passwordEncoder.matches(members.getPwd(), loginItem.getPwd()))){
                 return responseService.getItemResponse(jwtTokenProvider.createJwtToken(members.getId(), null));
             }
         }

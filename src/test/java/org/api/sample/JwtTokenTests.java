@@ -1,5 +1,6 @@
 package org.api.sample;
 
+import org.api.sample.model.Tokens;
 import org.api.sample.security.JwtTokenProvider;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -14,13 +15,15 @@ public class JwtTokenTests {
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
     private final Logger logger = LoggerFactory.getLogger(JwtTokenTests.class);
-    private static String token;
+    private static String accessToken;
+    private static String refreshToken;
 
     @Test
     public void createTokenTest(){
-        String token = jwtTokenProvider.createJwtToken("test", null);
+        Tokens token = jwtTokenProvider.createJwtToken("test", null);
         logger.info("token ===>{}", token);
-        this.token = token;
+        this.accessToken = token.getAccessToken();
+        this.refreshToken = token.getRefreshToken();
         assert (token != null);
     }
 
@@ -33,7 +36,7 @@ public class JwtTokenTests {
 
     @Test
     public void getTokenBodyTest(){
-        String primaryKey = jwtTokenProvider.getUserPrimaryKey(this.token);
+        String primaryKey = jwtTokenProvider.getUserPrimaryKey(this.accessToken);
         logger.info("primaryKey ===>{}", primaryKey);
         assert ("test".equals(primaryKey));
     }
