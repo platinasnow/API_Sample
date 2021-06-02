@@ -7,12 +7,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
 
-@SpringBootTest(properties = {"classpath:test-application.yml"})
-@Sql(scripts = {"classpath:test-data.sql"})
+import static org.assertj.core.api.BDDAssertions.then;
+
+@SpringBootTest
 public class MembersRepoTest {
 
     @Autowired
@@ -23,18 +23,20 @@ public class MembersRepoTest {
     public void findMemberList(){
         List<Members> list = memberService.findAll();
         logger.info("members ===> {}", list);
-        assert (list.size() == 2);
+        then(list.size()).isEqualTo(2);
     }
 
     @Test
     public void findMemberItem(){
         Members item = memberService.findById("test");
         logger.info("members ===> {}", item);
-        assert (item != null);
+        then(item).isNotNull();
+
 
         Members emptyItem = memberService.findById("test123");
         logger.info("members ===> {}", emptyItem);
-        assert (emptyItem == null);
+        then(emptyItem).isNull();
+
     }
 
 

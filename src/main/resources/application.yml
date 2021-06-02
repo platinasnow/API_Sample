@@ -24,12 +24,14 @@ spring:
   jpa:
     show-sql: true
 
-  logging:
-    level:
-      root: info
-      org.springframework: info
-      org.hibernate: debug
-      org.api.sample: debug
+logging:
+  level:
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql: trace
+
 
 springdoc:
   #packages-to-scan: org.api.sample.web

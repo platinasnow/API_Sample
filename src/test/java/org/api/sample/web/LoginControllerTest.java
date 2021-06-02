@@ -17,7 +17,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Sql(scripts = {"classpath:test-data.sql"})
 class LoginControllerTest {
 
     @Autowired
@@ -45,8 +44,7 @@ class LoginControllerTest {
                 .andReturn().getResponse().getContentAsString();
 
         logger.info("token ===> {}", token);
-        ItemResponse tokenResponse = mapper.readValue(token, ItemResponse.class);
-        authToken = tokenResponse.getData().toString();
+        authToken = token;
     }
 
     @Test
