@@ -1,12 +1,14 @@
 package org.api.sample.web;
 
 import lombok.RequiredArgsConstructor;
+import org.api.sample.dto.MemberDto;
 import org.api.sample.model.Members;
 import org.api.sample.model.response.CommonResponse;
 import org.api.sample.security.JwtTokenProvider;
 import org.api.sample.service.MemberService;
 import org.api.sample.service.ResponseService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.xml.ws.Response;
@@ -22,13 +24,19 @@ public class LoginController {
     private final ResponseService responseService;
 
     @PostMapping("/login")
-    public CommonResponse login(@RequestBody Members members){
-        String refreshTokenValidPk = jwtTokenProvider.getUserPrimaryKey(members.getRefreshToken());
-        Members loginItem =  memberService.findById(members.getId());
-        if(loginItem != null ){
-            if(loginItem.getId().equals(refreshTokenValidPk) ||
-                    (members.getPwd() != null && passwordEncoder.matches(members.getPwd(), loginItem.getPwd()))){
-                return responseService.getItemResponse(jwtTokenProvider.createJwtToken(members.getId(), null));
+    public CommonResponse login(@RequestBody MemberDto members){
+        //ID PSSS
+        if(StringUtils.hasText(members.getId())){
+            Members loginItem =  memberService.findById(members.getId());
+            if(loginItem != null ){
+                if(members.getPwd() != null && passwordEncoder.matches(members.getPwd(), loginItem.getPwd())){
+                    return responseService.getItemResponse(jwtTokenProvider.createJwtToken(members.getId(), null));
+                }
+            }
+        } else if(StringUtils.hasText(members.getRefreshToken())) { //refresh token
+            String refreshTokenValidPk = jwtTokenProvider.getUserPrimaryKeyByRefreshToken(members.getRefreshToken());
+            if(refreshTokenValidPk != null){
+                return responseService.getItemResponse(jwtTokenProvider.createJwtToken(refreshTokenValidPk, null));
             }
         }
         return responseService.getFailedResponse("1000", "loginFail");

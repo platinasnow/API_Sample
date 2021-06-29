@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import java.io.Serializable;
 
 @Entity
-public class Members extends Tokens implements Serializable {
+public class Members implements Serializable {
 
     @Id
     private String id;

@@ -27,7 +27,7 @@ public class JwtTokenProvider {
     private String tokenSecretKey;
     private final long tokenValidMillisecond = 1000L * 60 * 30; // 30분 유효
     @Value("spring.jwt.refreshTokenSecret")
-    private String refreshTokenSecret;
+    private String refreshTokenSecretKey;
     private final long refreshTokenValidMillisecond = 1000L * 60 * 60 * 24 * 14; //14일 유효
     private final String _TOKEN_NAME = "X-AUTH-TOKEN";
 
@@ -38,6 +38,7 @@ public class JwtTokenProvider {
     protected void init() {
         logger.debug("***** JWT Provider init");
         tokenSecretKey = Base64.getEncoder().encodeToString(tokenSecretKey.getBytes());
+        refreshTokenSecretKey = Base64.getEncoder().encodeToString(refreshTokenSecretKey.getBytes());
     }
 
     public Tokens createJwtToken(String username, List<String> roles) {
@@ -60,7 +61,7 @@ public class JwtTokenProvider {
                 .withClaim("roles", roles)
                 .withIssuedAt(cal.getTime())
                 .withExpiresAt(new Date(cal.getTimeInMillis() + refreshTokenValidMillisecond))
-                .sign(Algorithm.HMAC256(refreshTokenSecret)));
+                .sign(Algorithm.HMAC256(refreshTokenSecretKey)));
 
         return token;
     }
@@ -70,12 +71,20 @@ public class JwtTokenProvider {
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
-    public String getUserPrimaryKey(String token) {
+    public String getUserPrimaryKey(String token){
+        return this.getUserPrimaryKey(token, tokenSecretKey);
+    }
+
+    public String getUserPrimaryKeyByRefreshToken(String token){
+        return this.getUserPrimaryKey(token, refreshTokenSecretKey);
+    }
+
+    private String getUserPrimaryKey(String token, String secretKey) {
         String primaryKey = null;
         try {
-            primaryKey = JWT.require(Algorithm.HMAC256(tokenSecretKey)).build().verify(token).getSubject();
+            primaryKey = JWT.require(Algorithm.HMAC256(secretKey)).build().verify(token).getSubject();
         } catch (Exception e) {
-            //e.printStackTrace();
+            e.printStackTrace();
         }
         return primaryKey;
     }
